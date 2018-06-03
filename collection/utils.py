@@ -7,7 +7,6 @@ import re
 r_url = re.compile('<b>.*?<a\s*href="(.*?)"\s*class="ulink">', re.DOTALL)
 
 # 匹配影片详细信息
-r_cover_url = re.compile(u'<br /><br />.*?<img.*?border="0".*?src="(.*?)".*?alt="".*?/>.*<br /><br />◎译　　名', re.DOTALL)
 r_name_cn = re.compile(u"◎译　　名(.*?)<br />", re.DOTALL)
 r_name = re.compile(u"◎片　　名(.*?)<br />", re.DOTALL)
 r_year = re.compile(u"◎年　　代(.*?)<br />", re.DOTALL)
@@ -20,14 +19,10 @@ r_score = re.compile(u"◎(IMDB评分|豆瓣评分)(.*?)<br />", re.DOTALL | re.
 r_file_size = re.compile(u"◎文件大小(.*?)<br />", re.DOTALL)
 r_movie_duration = re.compile(u"◎片　　长(.*?)<br />", re.DOTALL)
 r_director = re.compile(u"◎导　　演(.*?)<br />", re.DOTALL)
-r_to_star = re.compile(u'◎主　　演(.*?)<br /><br />◎简　　介', re.DOTALL)
-r_brief_introduction= re.compile(u'◎简　　介(.*?)【下载地址】', re.DOTALL)
 
+r_download_url = re.compile('<td.*?bgcolor="#fdfddf">.*?<a.*?>(.*?)</a>', re.DOTALL)
 
-r_download_url = re.compile('<td.*?bgcolor="#fdfddf">.*?<a.*?>(ftp.*?)</a>', re.DOTALL)
-
-r_list = (r_cover_url,
-          r_name_cn,
+r_list = (r_name_cn,
           r_name,
           r_year,
           r_country,
@@ -38,9 +33,7 @@ r_list = (r_cover_url,
           r_score,
           r_file_size,
           r_movie_duration,
-          r_director,
-          r_to_star,
-          r_brief_introduction)
+          r_director)
 
 
 # 提取电影url
@@ -59,11 +52,11 @@ def parse_details(html):
     if html:
         fields = []
         for regex in r_list:
-            m = regex.search(html.decode('utf-8'))
+            m = regex.search(html)
             if not m:
                 field = ''
             else:
-                field = m.group(m.lastindex).replace('&nbsp;', '').replace(';', ',').replace('　','').strip()
+                field = m.group(m.lastindex).replace('&nbsp;', '').replace(';', ',').strip()
             fields.append(field)
 
         urls = r_download_url.findall(html)
@@ -74,5 +67,5 @@ def parse_details(html):
                 if urls.index(url) != len(urls) - 1:
                     field = field + ','
         fields.append(field)
-        details = ''.join(map(lambda x: '『' + x + '』;', fields)) + '\n'
+        details = ''.join(map(lambda x: '"' + x + '";', fields)) + '\n'
     return details

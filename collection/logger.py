@@ -5,7 +5,7 @@ import logging
 import sys
 
 
-def get_logger(name=None, filename=None, level=logging.DEBUG):
+def get_logger(name=None, filename=None, level=logging.ERROR):
     logger = logging.getLogger(name)
     logger.setLevel(level)
 

@@ -8,7 +8,6 @@
 
 """
 import os
-import sys
 import threading
 import time
 from Queue import Queue
@@ -17,9 +16,6 @@ import requests
 
 from logger import get_logger
 from utils import *
-
-reload(sys)
-sys.setdefaultencoding('utf-8')
 
 logger = get_logger('movie', 'debug.log')
 
