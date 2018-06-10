@@ -21,7 +21,7 @@ r_file_size = re.compile(u"◎文件大小(.*?)<br />", re.DOTALL)
 r_movie_duration = re.compile(u"◎片　　长(.*?)<br />", re.DOTALL)
 r_director = re.compile(u"◎导　　演(.*?)<br />", re.DOTALL)
 r_to_star = re.compile(u'◎主　　演(.*?)<br /><br />◎简　　介', re.DOTALL)
-r_brief_introduction= re.compile(u'◎简　　介(.*?)【下载地址】', re.DOTALL)
+r_brief_introduction= re.compile(u'◎简　　介 <br /><br />(.*?)【下载地址】', re.DOTALL)
 
 
 r_download_url = re.compile('<td.*?bgcolor="#fdfddf">.*?<a.*?>(ftp.*?)</a>', re.DOTALL)
@@ -74,5 +74,5 @@ def parse_details(html):
                 if urls.index(url) != len(urls) - 1:
                     field = field + ','
         fields.append(field)
-        details = ''.join(map(lambda x: '『' + x + '』;', fields)) + '\n'
+        details = ''.join(map(lambda x: '「' + x + '」;', fields)) + '\n'
     return details
